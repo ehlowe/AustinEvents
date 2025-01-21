@@ -104,7 +104,7 @@
                                     <div class="event-details">
                                         <p><b>Date & Time:</b> ${event.date} - ${event.time}</p>
                                         ${event.location ? `<p><b>Location:</b> ${event.location}</p>` : ''}
-                                        <p><b>Source:</b> ${event.source}</p>
+                                        <p><b>Source:</b> ${event.source == 'meetup' ? 'Meetup' : event.source == 'cf' ? 'Capital Factory': event.source}</p>
                                         ${event.attendees ? `<p><b>Attendees:</b> ${event.attendees}</p>` : ''}
                                     </div>
                                 </div>
