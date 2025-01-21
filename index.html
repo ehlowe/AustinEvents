@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events List</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,700;1,14..32,700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: "Inter", serif;
+            font-optical-sizing: auto;
+            font-weight: 300;
+            background: rgb(231, 231, 255);
+            /* background: linear-gradient(217deg, rgba(252, 98, 98, 0.8), rgba(255,0,0,0) 20%),
+                        linear-gradient(127deg, rgba(199, 255, 199, 0.8), rgba(0,255,0,0) 20%),
+                        linear-gradient(336deg, rgba(117, 117, 251, 0.8), rgba(0,0,255,0) 20%); */
+        }
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        h2 {
+            font-size: 2rem;
+            margin: 0;
+            font-weight: 700;
+        }
+        .events-container {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            row-gap: 2rem;
+            padding: 0 2rem;
+        }
+        .event-card {
+            border: 1px solid #ddd;
+            padding: 1.2rem;
+            border-radius: 5px;
+            background-color: white;
+        }
+        .event-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .event-details {
+            color: #666;
+        }
+        .event-link {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        .event-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <script>
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch('https://austinevents.xyz/view_daily_json', {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'omit'
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const events = await response.json();
+                
+                // Create and display the events
+                const container = document.getElementById('events-container');
+                container.innerHTML = ''; // Clear existing content
+                
+                for (const [date, dateEvents] of Object.entries(events)) {
+                    // Add date header
+                    container.innerHTML += `
+                        <div style="grid-column: 1 / -1;">
+                            <h2>${date}</h2>
+                        </div>
+                    `;
+                    
+                    // Add events for this date
+                    if (dateEvents.length === 0) {
+                        container.innerHTML += `<p>No events found for this date.</p>`;
+                    } else {
+                        dateEvents.forEach(event => {
+                            container.innerHTML += `
+                                <div class="event-card" onclick="window.open('https://' + '${event.link}'.replace('https://', '').replace('http://', ''), '_blank');" style="cursor: pointer;">
+                                    <div class="event-title">${event.name}</div>
+                                    <div class="event-details">
+                                        <p><b>Date & Time:</b> ${event.date} - ${event.time}</p>
+                                        ${event.location ? `<p><b>Location:</b> ${event.location}</p>` : ''}
+                                        <p><b>Source:</b> ${event.source}</p>
+                                        ${event.attendees ? `<p><b>Attendees:</b> ${event.attendees}</p>` : ''}
+                                    </div>
+                                </div>
+                            `;
+                        });
+                    }
+                }
+                
+                // Show the container
+                container.style.display = 'grid';
+                
+            } catch (error) {
+                console.error('Error loading events:', error);
+                document.getElementById('events-container').innerHTML = 
+                    `<p>Error loading events: ${error.message}. Please try again later.</p>`;
+            }
+        });
+    </script>
+</head>
+<body>
+    <h1>Everything Austin</h1>
+    <div id="events-container" class="events-container" style="display: none;">
+        {% for date, date_events in events.items %}
+            <div style="grid-column: 1 / -1;">
+                <h2>{{ date }}</h2>
+            </div>
+            {% for event in date_events %}
+                <div class="event-card" onclick="window.open('https://' + '{{ event.link }}'.replace('https://', '').replace('http://', ''), '_blank');" style="cursor: pointer;">
+                    <div class="event-title">{{ event.name }}</div>
+                    <div class="event-details">
+                        <p>Date & Time: {{ event.date }} {{ event.time }}</p>
+                        <p>Location: {{ event.location }}</p>
+                        <p>Source: <b>{{ event.source }}</b></p>
+                        {% if event.attendees %}
+                            <p>Attendees: {{ event.attendees }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            {% empty %}
+                <p>No events found for this date.</p>
+            {% endfor %}
+        {% empty %}
+            <p>No events found.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>
