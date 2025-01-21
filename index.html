@@ -9,10 +9,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,700;1,14..32,700&display=swap" rel="stylesheet">
     <style>
         body {
+            background: rgb(231, 231, 255);
+        }
+        .title {
+            font-weight: 600;
+        }
+        * {
             font-family: "Inter", serif;
             font-optical-sizing: auto;
             font-weight: 300;
-            background: rgb(231, 231, 255);
             /* background: linear-gradient(217deg, rgba(252, 98, 98, 0.8), rgba(255,0,0,0) 20%),
                         linear-gradient(127deg, rgba(199, 255, 199, 0.8), rgba(0,255,0,0) 20%),
                         linear-gradient(336deg, rgba(117, 117, 251, 0.8), rgba(0,0,255,0) 20%); */
@@ -102,10 +107,10 @@
                                 <div class="event-card" onclick="window.open('https://' + '${event.link}'.replace('https://', '').replace('http://', ''), '_blank');" style="cursor: pointer;">
                                     <div class="event-title">${event.name}</div>
                                     <div class="event-details">
-                                        <p><b>Date & Time:</b> ${event.date} - ${event.time}</p>
-                                        ${event.location ? `<p><b>Location:</b> ${event.location}</p>` : ''}
-                                        <p><b>Source:</b> ${event.source == 'meetup' ? 'Meetup' : event.source == 'cf' ? 'Capital Factory': event.source}</p>
-                                        ${event.attendees ? `<p><b>Attendees:</b> ${event.attendees}</p>` : ''}
+                                        <p><b><span class='title'>Date & Time:</span></b> ${event.date} - ${event.time}</p>
+                                        ${event.location ? `<p><b><span class='title'>Location:</span></b> ${event.location}</p>` : ''}
+                                        <p><b><span class='title'>Source:</span></b> ${event.source == 'meetup' ? 'Meetup' : event.source == 'cf' ? 'Capital Factory': event.source}</p>
+                                        ${event.attendees ? `<p><b><span class='title'>Attendees:</span></b> ${event.attendees}</p>` : ''}
                                     </div>
                                 </div>
                             `;
@@ -137,7 +142,7 @@
                     <div class="event-details">
                         <p>Date & Time: {{ event.date }} {{ event.time }}</p>
                         <p>Location: {{ event.location }}</p>
-                        <p>Source: <b>{{ event.source }}</b></p>
+                        <p>Source: {{ event.source }}</p>
                         {% if event.attendees %}
                             <p>Attendees: {{ event.attendees }}</p>
                         {% endif %}
