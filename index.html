@@ -34,9 +34,11 @@
         }
         .events-container {
             display: grid;
-            grid-template-columns: repeat(1, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             row-gap: 2rem;
+            column-gap: 1.5rem;
             padding: 0 2rem;
+            flex-shrink: 1
         }
         .event-card {
             border: 1px solid #ddd;
@@ -67,6 +69,25 @@
         .event-link:hover {
             text-decoration: underline;
         }
+
+        @media only screen and (max-width: 932px) {
+            .events-container {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                row-gap: 2rem;
+                column-gap: 1.5rem;
+                padding: 0 2rem;
+        }
+
+        @media only screen and (max-width: 630px) {
+            .events-container {
+                grid-template-columns: repeat(1, 1fr);
+                row-gap: 2rem;
+                padding: 0rem 1.5rem;
+            }
+        }
+    }
+    
     </style>
     <script>
         window.addEventListener('DOMContentLoaded', async () => {
